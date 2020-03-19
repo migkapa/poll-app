@@ -21,6 +21,7 @@ class Dashboard extends Component {
   render() {
     const { showAnswered } = this.state;
     const { answered, unanswered } = this.props;
+    const list = showAnswered === true ? answered : unanswered;
     return (
       <div>
         <div className="dashboard-toggle">
@@ -42,11 +43,11 @@ class Dashboard extends Component {
             Answered
           </button>
         </div>
-        {/* <ul className="dashboard-list">
+        <ul className="dashboard-list">
           {list.map(poll => (
             <li key={poll.id}>{poll.question}</li>
           ))}
-        </ul> */}
+        </ul>
       </div>
     );
   }
