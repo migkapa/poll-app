@@ -1,35 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class Dashboard extends Component {
   state = {
     showAnswered: false
   };
-
-  showUnanswered = () => {
+  showUnaswered = () => {
     this.setState(() => ({
       showAnswered: false
     }));
   };
-
   showAnswered = () => {
     this.setState(() => ({
       showAnswered: true
     }));
   };
-
   render() {
     const { showAnswered } = this.state;
     const { answered, unanswered } = this.props;
+
     const list = showAnswered === true ? answered : unanswered;
+
     return (
       <div>
-        <div className="dashboard-toggle">
+        <div className='dashboard-toggle'>
           <button
             style={{
               textDecoration: showAnswered === false ? 'underline' : null
             }}
-            onClick={this.showUnanswered}
+            onClick={this.showUnaswered}
           >
             Unanswered
           </button>
@@ -43,9 +43,11 @@ class Dashboard extends Component {
             Answered
           </button>
         </div>
-        <ul className="dashboard-list">
+        <ul className='dashboard-list'>
           {list.map(poll => (
-            <li key={poll.id}>{poll.question}</li>
+            <li key={poll.id}>
+              <Link to={`polls/${poll.id}`}>{poll.question}</Link>
+            </li>
           ))}
         </ul>
       </div>
@@ -53,8 +55,7 @@ class Dashboard extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { authedUser, polls, users } = state;
+function mapStateToProps({ authedUser, polls, users }) {
   const answers = users[authedUser].answers;
 
   const answered = answers
@@ -62,7 +63,7 @@ function mapStateToProps(state) {
     .sort((a, b) => b.timestamp - a.timestamp);
 
   const unanswered = Object.keys(polls)
-    .filter(id => !answered.includes(id))
+    .filter(id => !answers.includes(id))
     .map(id => polls[id])
     .sort((a, b) => b.timestamp - a.timestamp);
 
